@@ -228,160 +228,226 @@ public class Practice {
     }
 
     // Display the employee(s) who gets the second maximum salary
-    public static List<Employee> getSecondMaxSalaryEmployee() {
+    public static List<Employee> getSecondMaxSalaryEmployee(){
         //TODO Implement the method
-        return new ArrayList<>();
+        return employeeService.readAll().stream()
+                .filter(employee -> {
+                    Long secondMax = employeeService.readAll().stream()
+                            .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                            .map(Employee::getSalary)
+                            .limit(2)
+                            .skip(1)
+                            .findAny().get();
+                    return employee.getSalary().equals(secondMax);
+                })
+                .collect(Collectors.toList());
     }
 
     // Display the minimum salary an employee gets
     public static Long getMinSalary() throws Exception {
         //TODO Implement the method
-        return 1L;
+        return employeeService.readAll().stream()
+                .min(Comparator.comparing(Employee::getSalary))
+                .map(Employee::getSalary)
+                .get();
     }
 
     // Display the employee(s) who gets the minimum salary
     public static List<Employee> getMinSalaryEmployee() {
         //TODO Implement the method
-        return new ArrayList<>();
+        return employeeService.readAll().stream()
+                .filter(employee -> {
+                    Long secondMin = employeeService.readAll().stream()
+                            .sorted(Comparator.comparing(Employee::getSalary))
+                            .map(Employee::getSalary)
+                            .findAny().get();
+                    return employee.getSalary().equals(secondMin);
+                })
+                .collect(Collectors.toList());
     }
 
     // Display the second minimum salary an employee gets
     public static Long getSecondMinSalary() throws Exception {
         //TODO Implement the method
-        return 1L;
+        return employeeService.readAll().stream()
+                .sorted(Comparator.comparing(Employee::getSalary))
+                .map(Employee::getSalary)
+                .limit(2)
+                .skip(1)
+                .findAny().get();
     }
 
-    // Display the employee(s) who gets the second minimum salary
-    public static List<Employee> getSecondMinSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display the employee(s) who gets the second minimum salary
+        public static List<Employee> getSecondMinSalaryEmployee () {
+            //TODO Implement the method
+            return employeeService.readAll().stream()
+                    .filter(employee -> {
+                        Long secondMin = employeeService.readAll().stream()
+                                .sorted(Comparator.comparing(Employee::getSalary))
+                                .map(Employee::getSalary)
+                                .limit(2)
+                                .skip(1)
+                                .findAny().get();
+                        return employee.getSalary().equals(secondMin);
+                    })
+                    .collect(Collectors.toList());
+        }
 
-    // Display the average salary of the employees
-    public static Double getAverageSalary() {
-        //TODO Implement the method
-        return 1d;
-    }
+        // Display the average salary of the employees
+        public static Double getAverageSalary () {
+            //TODO Implement the method
+            return employeeService.readAll().stream()
+                    .map(Employee::getSalary)
+                    .collect(Collectors.toList())
+                    .stream()
+                    .mapToDouble(d -> d)
+                    .average()
+                    .orElse(0.0);
+        }
 
-    // Display all the employees who are making more than average salary
-    public static List<Employee> getAllEmployeesAboveAverage() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees who are making more than average salary
+        public static List<Employee> getAllEmployeesAboveAverage () {
+            //TODO Implement the method
+            return employeeService.readAll().stream()
+                    .filter(employee -> {
+                        Double average = employeeService.readAll().stream()
+                                .map(Employee::getSalary)
+                                .collect(Collectors.toList())
+                                .stream()
+                                .mapToDouble(d -> d)
+                                .average()
+                                .orElse(0.0);
+                        return employee.getSalary() > average;
+                    })
+                    .collect(Collectors.toList());
+        }
 
-    // Display all the employees who are making less than average salary
-    public static List<Employee> getAllEmployeesBelowAverage() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees who are making less than average salary
+        public static List<Employee> getAllEmployeesBelowAverage () {
+            //TODO Implement the method
+            return employeeService.readAll().stream()
+                    .filter(employee -> {
+                        Double average = employeeService.readAll().stream()
+                                .map(Employee::getSalary)
+                                .collect(Collectors.toList())
+                                .stream()
+                                .mapToDouble(d -> d)
+                                .average()
+                                .orElse(0.0);
+                        return employee.getSalary() < average;
+                    })
+                    .collect(Collectors.toList());
+        }
 
-    // Display all the employees separated based on their department id number
-    public static Map<Long, List<Employee>> getAllEmployeesForEachDepartment() {
-        //TODO Implement the method
-        return new HashMap<>();
-    }
+        // Display all the employees separated based on their department id number
+        public static Map<Long, List<Employee>> getAllEmployeesForEachDepartment () {
+            //TODO Implement the method
+            return new HashMap<>();
+        }
 
-    // Display the total number of the departments
-    public static Long getTotalDepartmentsNumber() {
-        //TODO Implement the method
-        return 1L;
-    }
+        // Display the total number of the departments
+        public static Long getTotalDepartmentsNumber () {
+            //TODO Implement the method
+            return 1L;
+        }
 
-    // Display the employee whose first name is 'Alyssa' and manager's first name is 'Eleni' and department name is 'Sales'
-    public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales() throws Exception {
-        //TODO Implement the method
-        return new Employee();
-    }
+        // Display the employee whose first name is 'Alyssa' and manager's first name is 'Eleni' and department name is 'Sales'
+        public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales () throws
+        Exception {
+            //TODO Implement the method
+            return new Employee();
+        }
 
-    // Display all the job histories in ascending order by start date
-    public static List<JobHistory> getAllJobHistoriesInAscendingOrder() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the job histories in ascending order by start date
+        public static List<JobHistory> getAllJobHistoriesInAscendingOrder () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the job histories in descending order by start date
-    public static List<JobHistory> getAllJobHistoriesInDescendingOrder() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the job histories in descending order by start date
+        public static List<JobHistory> getAllJobHistoriesInDescendingOrder () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the job histories where the start date is after 01.01.2005
-    public static List<JobHistory> getAllJobHistoriesStartDateAfterFirstDayOfJanuary2005() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the job histories where the start date is after 01.01.2005
+        public static List<JobHistory> getAllJobHistoriesStartDateAfterFirstDayOfJanuary2005 () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the job histories where the end date is 31.12.2007 and the job title of job is 'Programmer'
-    public static List<JobHistory> getAllJobHistoriesEndDateIsLastDayOfDecember2007AndJobTitleIsProgrammer() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the job histories where the end date is 31.12.2007 and the job title of job is 'Programmer'
+        public static List<JobHistory> getAllJobHistoriesEndDateIsLastDayOfDecember2007AndJobTitleIsProgrammer () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display the employee whose job history start date is 01.01.2007 and job history end date is 31.12.2007 and department's name is 'Shipping'
-    public static Employee getEmployeeOfJobHistoryWhoseStartDateIsFirstDayOfJanuary2007AndEndDateIsLastDayOfDecember2007AndDepartmentNameIsShipping() throws Exception {
-        //TODO Implement the method
-        return new Employee();
-    }
+        // Display the employee whose job history start date is 01.01.2007 and job history end date is 31.12.2007 and department's name is 'Shipping'
+        public static Employee getEmployeeOfJobHistoryWhoseStartDateIsFirstDayOfJanuary2007AndEndDateIsLastDayOfDecember2007AndDepartmentNameIsShipping
+        () throws Exception {
+            //TODO Implement the method
+            return new Employee();
+        }
 
-    // Display all the employees whose first name starts with 'A'
-    public static List<Employee> getAllEmployeesFirstNameStartsWithA() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees whose first name starts with 'A'
+        public static List<Employee> getAllEmployeesFirstNameStartsWithA () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the employees whose job id contains 'IT'
-    public static List<Employee> getAllEmployeesJobIdContainsIT() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees whose job id contains 'IT'
+        public static List<Employee> getAllEmployeesJobIdContainsIT () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display the number of employees whose job title is programmer and department name is 'IT'
-    public static Long getNumberOfEmployeesWhoseJobTitleIsProgrammerAndDepartmentNameIsIT() {
-        //TODO Implement the method
-        return 1L;
-    }
+        // Display the number of employees whose job title is programmer and department name is 'IT'
+        public static Long getNumberOfEmployeesWhoseJobTitleIsProgrammerAndDepartmentNameIsIT () {
+            //TODO Implement the method
+            return 1L;
+        }
 
-    // Display all the employees whose department id is 50, 80, or 100
-    public static List<Employee> getAllEmployeesDepartmentIdIs50or80or100() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees whose department id is 50, 80, or 100
+        public static List<Employee> getAllEmployeesDepartmentIdIs50or80or100 () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display the initials of all the employees
-    // Note: You can assume that there is no middle name
-    public static List<String> getAllEmployeesInitials() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display the initials of all the employees
+        // Note: You can assume that there is no middle name
+        public static List<String> getAllEmployeesInitials () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display the full names of all the employees
-    public static List<String> getAllEmployeesFullNames() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display the full names of all the employees
+        public static List<String> getAllEmployeesFullNames () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display the length of the longest full name(s)
-    public static Integer getLongestNameLength() throws Exception {
-        //TODO Implement the method
-        return 1;
-    }
+        // Display the length of the longest full name(s)
+        public static Integer getLongestNameLength () throws Exception {
+            //TODO Implement the method
+            return 1;
+        }
 
-    // Display the employee(s) with the longest full name(s)
-    public static List<Employee> getLongestNamedEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display the employee(s) with the longest full name(s)
+        public static List<Employee> getLongestNamedEmployee () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the employees whose department id is 90, 60, 100, 120, or 130
-    public static List<Employee> getAllEmployeesDepartmentIdIs90or60or100or120or130() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees whose department id is 90, 60, 100, 120, or 130
+        public static List<Employee> getAllEmployeesDepartmentIdIs90or60or100or120or130 () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
-    // Display all the employees whose department id is NOT 90, 60, 100, 120, or 130
-    public static List<Employee> getAllEmployeesDepartmentIdIsNot90or60or100or120or130() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+        // Display all the employees whose department id is NOT 90, 60, 100, 120, or 130
+        public static List<Employee> getAllEmployeesDepartmentIdIsNot90or60or100or120or130 () {
+            //TODO Implement the method
+            return new ArrayList<>();
+        }
 
 }
