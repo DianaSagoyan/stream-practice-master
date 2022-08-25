@@ -361,7 +361,7 @@ public class Practice {
         public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales () throws
         Exception {
             //TODO Implement the method
-            return 
+            return new Employee();
         }
 
         // Display all the job histories in ascending order by start date
