@@ -299,12 +299,7 @@ public class Practice {
         public static Double getAverageSalary () {
             //TODO Implement the method
             return employeeService.readAll().stream()
-                    .map(Employee::getSalary)
-                    .collect(Collectors.toList())
-                    .stream()
-                    .mapToDouble(d -> d)
-                    .average()
-                    .orElse(0.0);
+                    .collect(Collectors.averagingLong(Employee::getSalary));
         }
 
         // Display all the employees who are making more than average salary
@@ -313,12 +308,7 @@ public class Practice {
             return employeeService.readAll().stream()
                     .filter(employee -> {
                         Double average = employeeService.readAll().stream()
-                                .map(Employee::getSalary)
-                                .collect(Collectors.toList())
-                                .stream()
-                                .mapToDouble(d -> d)
-                                .average()
-                                .orElse(0.0);
+                                .collect(Collectors.averagingLong(Employee::getSalary));
                         return employee.getSalary() > average;
                     })
                     .collect(Collectors.toList());
@@ -330,21 +320,17 @@ public class Practice {
             return employeeService.readAll().stream()
                     .filter(employee -> {
                         Double average = employeeService.readAll().stream()
-                                .map(Employee::getSalary)
-                                .collect(Collectors.toList())
-                                .stream()
-                                .mapToDouble(d -> d)
-                                .average()
-                                .orElse(0.0);
+                                .collect(Collectors.averagingLong(Employee::getSalary));
                         return employee.getSalary() < average;
                     })
                     .collect(Collectors.toList());
         }
-    //=============================================================================
+
         // Display all the employees separated based on their department id number
         public static Map<Long, List<Employee>> getAllEmployeesForEachDepartment () {
             //TODO Implement the method
-            return new HashMap<>();
+            return employeeService.readAll().stream()
+                    .collect(Collectors.groupingBy(employee -> employee.getDepartment().getId()));
         }
 
 
@@ -354,12 +340,16 @@ public class Practice {
             return departmentService.readAll().stream()
                     .count();
         }
-    //=============================================================================
+
         // Display the employee whose first name is 'Alyssa' and manager's first name is 'Eleni' and department name is 'Sales'
         public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales () throws
         Exception {
             //TODO Implement the method
-            return new Employee();
+            return employeeService.readAll().stream()
+                    .filter(employee -> employee.getFirstName().equals("Alyssa"))
+                    .filter(employee -> employee.getDepartment().getDepartmentName().equals("Sales"))
+                    .filter(employee -> employee.getManager().getFirstName().equals("Eleni"))
+                    .findAny().get();
         }
 
         // Display all the job histories in ascending order by start date
@@ -395,12 +385,18 @@ public class Practice {
                     .collect(Collectors.toList());
 
         }
-    //=============================================================================
+
         // Display the employee whose job history start date is 01.01.2007 and job history end date is 31.12.2007 and department's name is 'Shipping'
         public static Employee getEmployeeOfJobHistoryWhoseStartDateIsFirstDayOfJanuary2007AndEndDateIsLastDayOfDecember2007AndDepartmentNameIsShipping
         () throws Exception {
             //TODO Implement the method
-            return new Employee();
+            return getAllJobHistories().stream()
+                    .filter(employee -> employee.getDepartment().getDepartmentName().equals("Shipping"))
+                    .filter(jobHistory -> jobHistory.getStartDate().equals(LocalDate.of(2007, 01, 01)))
+                    .filter(jobHistory -> jobHistory.getEndDate().equals(LocalDate.of(2007, 12, 31)))
+                    .map(JobHistory::getEmployee)
+                    .findAny().get();
+
         }
 
         // Display all the employees whose first name starts with 'A'
@@ -426,11 +422,14 @@ public class Practice {
                     .filter(employee -> employee.getJob().getJobTitle().equals("Programmer") && employee.getDepartment().getDepartmentName().equals("IT"))
                     .count();
         }
-    //=============================================================================
+
         // Display all the employees whose department id is 50, 80, or 100
         public static List<Employee> getAllEmployeesDepartmentIdIs50or80or100 () {
             //TODO Implement the method
-            return new ArrayList<>();
+            return getAllEmployees().stream()
+                    .filter(employee -> employee.getDepartment().getId() == 50 || employee.getDepartment().getId() == 80 || employee.getDepartment().getId() == 100)
+                    .collect(Collectors.toList());
+
         }
 
         // Display the initials of all the employees
@@ -459,20 +458,22 @@ public class Practice {
                     .map(String::length)
                     .get();
         }
-//============================================================================
+
         // Display the employee(s) with the longest full name(s)
         public static List<Employee> getLongestNamedEmployee () {
             //TODO Implement the method
-            return employeeService.readAll().stream()
-                    .filter(employee -> {
-                        String fullName = employee.getFirstName().concat(employee.getLastName());
-                        Integer maxLength = employeeService.readAll().stream()
-                                .map(employee1 -> fullName.length())
-                                .max(Math::max).get();
-                        return maxLength.equals(fullName.length());
+            return getAllEmployees().stream()     .filter(p-> {
+                        Integer longest= 0;
+                        try {
+                            longest = getLongestNameLength();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        return (p.getFirstName()+" "+p.getLastName()).length()== longest;
+
                     })
                     .collect(Collectors.toList());
-
         }
 
         // Display all the employees whose department id is 90, 60, 100, 120, or 130
