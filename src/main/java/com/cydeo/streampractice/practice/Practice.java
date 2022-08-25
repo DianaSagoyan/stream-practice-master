@@ -5,6 +5,7 @@ import com.cydeo.streampractice.service.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
@@ -338,36 +339,45 @@ public class Practice {
                     })
                     .collect(Collectors.toList());
         }
-
+    //=============================================================================
         // Display all the employees separated based on their department id number
         public static Map<Long, List<Employee>> getAllEmployeesForEachDepartment () {
             //TODO Implement the method
-            return new HashMap<>();
+            return employeeService.readAll().stream()
+                    .collect(Collectors.toMap(employee -> employee.getDepartment().getId(), employee -> employeeService.readAll().stream()
+                             .filter(employee1 -> employee1.getDepartment().getId().equals(employee.getDepartment().getId()))
+                             .collect(Collectors.toList())));
         }
+//=============================================================================
 
         // Display the total number of the departments
         public static Long getTotalDepartmentsNumber () {
             //TODO Implement the method
-            return 1L;
+            return departmentService.readAll().stream()
+                    .count();
         }
 
         // Display the employee whose first name is 'Alyssa' and manager's first name is 'Eleni' and department name is 'Sales'
         public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales () throws
         Exception {
             //TODO Implement the method
-            return new Employee();
+            return 
         }
 
         // Display all the job histories in ascending order by start date
         public static List<JobHistory> getAllJobHistoriesInAscendingOrder () {
             //TODO Implement the method
-            return new ArrayList<>();
+            return jobHistoryService.readAll().stream()
+                    .sorted(Comparator.comparing(JobHistory::getStartDate))
+                    .collect(Collectors.toList());
         }
 
         // Display all the job histories in descending order by start date
         public static List<JobHistory> getAllJobHistoriesInDescendingOrder () {
             //TODO Implement the method
-            return new ArrayList<>();
+            return jobHistoryService.readAll().stream()
+                    .sorted(Comparator.comparing(JobHistory::getStartDate).reversed())
+                    .collect(Collectors.toList());
         }
 
         // Display all the job histories where the start date is after 01.01.2005
