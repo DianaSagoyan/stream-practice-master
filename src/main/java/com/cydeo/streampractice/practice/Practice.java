@@ -124,10 +124,18 @@ public class Practice {
     // Display the region of the IT department
     public static Region getRegionOfITDepartment() throws Exception {
         //TODO Implement the method
+//        return departmentService.readAll().stream()
+//                .filter(department -> department.getDepartmentName().equals("IT"))
+//                .map(it -> it.getLocation().getCountry().getRegion())
+//                .findAny().get();
+
+//        return departmentService.readAll().stream()
+//                .filter(department -> department.getDepartmentName().equals("IT"))
+//                .findFirst().get().getLocation().getCountry().getRegion();
+
         return departmentService.readAll().stream()
                 .filter(department -> department.getDepartmentName().equals("IT"))
-                .map(it -> it.getLocation().getCountry().getRegion())
-                .findAny().get();
+                .findFirst().orElseThrow(() -> new Exception("No department found")).getLocation().getCountry().getRegion();
     }
 
     // Display all the departments where the region of department is 'Europe'
@@ -141,11 +149,20 @@ public class Practice {
     // Display if there is any employee with salary less than 1000. If there is none, the method should return true
     public static boolean checkIfThereIsNoSalaryLessThan1000() {
         //TODO Implement the method
-        return employeeService.readAll().stream()
-                .map(Employee::getSalary)
-                .filter(salary -> salary < 1000)
-                .collect(Collectors.toList())
-                .isEmpty();
+//        return employeeService.readAll().stream()
+//                .map(Employee::getSalary)
+//                .filter(salary -> salary < 1000)
+//                .collect(Collectors.toList())
+//                .isEmpty();
+
+//        return employeeService.readAll().stream()
+//                .allMatch(employee -> employee.getSalary() > 1000);
+
+//        return employeeService.readAll().stream()
+//                .noneMatch(employee -> employee.getSalary() < 1000);
+
+        return !employeeService.readAll().stream()
+                .anyMatch(employee -> employee.getSalary() < 1000);
     }
 
     // Check if the salaries of all the employees in IT department are greater than 2000 (departmentName: IT)
