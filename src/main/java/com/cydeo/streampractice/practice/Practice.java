@@ -271,20 +271,27 @@ public class Practice {
         return employeeService.readAll().stream()
                 .filter(employee -> employee.getDepartment().getLocation().getCountry().getRegion().getRegionName().equals("Americas"))
                 .max(Comparator.comparing(Employee::getSalary))
-                .map(Employee::getSalary)
-                .get();
+                .get().getSalary();
 
     }
 
     // Display the second maximum salary an employee gets
     public static Long getSecondMaxSalary() throws Exception {
         //TODO Implement the method
+//        return employeeService.readAll().stream()
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+//                .map(Employee::getSalary)
+//                .limit(2)
+//                .skip(1)
+//                .findAny().get();
+
         return employeeService.readAll().stream()
                 .sorted(Comparator.comparing(Employee::getSalary).reversed())
                 .map(Employee::getSalary)
-                .limit(2)
+                .distinct()      //maybe there are more than 1 employees with second maximum salary
                 .skip(1)
-                .findAny().get();
+                .findFirst().get();
+
     }
 
     // Display the employee(s) who gets the second maximum salary
@@ -357,7 +364,7 @@ public class Practice {
         public static Double getAverageSalary () {
             //TODO Implement the method
             return employeeService.readAll().stream()
-                    .collect(Collectors.averagingLong(Employee::getSalary));
+                    .collect(Collectors.averagingDouble(Employee::getSalary));
         }
 
         // Display all the employees who are making more than average salary
@@ -452,7 +459,7 @@ public class Practice {
                     .filter(employee -> employee.getDepartment().getDepartmentName().equals("Shipping"))
                     .filter(jobHistory -> jobHistory.getStartDate().equals(LocalDate.of(2007, 01, 01)))
                     .filter(jobHistory -> jobHistory.getEndDate().equals(LocalDate.of(2007, 12, 31)))
-                    .map(JobHistory::getEmployee)
+                    .map(JobHistory::getEmployee)                   //findFirst().get().getEmployee()
                     .findAny().get();
 
         }
@@ -477,7 +484,8 @@ public class Practice {
         public static Long getNumberOfEmployeesWhoseJobTitleIsProgrammerAndDepartmentNameIsIT () {
             //TODO Implement the method
             return employeeService.readAll().stream()
-                    .filter(employee -> employee.getJob().getJobTitle().equals("Programmer") && employee.getDepartment().getDepartmentName().equals("IT"))
+                    .filter(employee -> employee.getJob().getJobTitle().equals("Programmer")
+                            && employee.getDepartment().getDepartmentName().equals("IT"))
                     .count();
         }
 
@@ -510,8 +518,13 @@ public class Practice {
         // Display the length of the longest full name(s)
         public static Integer getLongestNameLength () throws Exception {
             //TODO Implement the method
-            return employeeService.readAll().stream()
-                    .map(employee -> employee.getFirstName().concat(" ").concat(employee.getLastName()))
+//            return employeeService.readAll().stream()
+//                    .map(employee -> employee.getFirstName().concat(" ").concat(employee.getLastName()))
+//                    .max(Comparator.comparing(String::length))
+//                    .map(String::length)
+//                    .get();
+
+            return getAllEmployeesFullNames().stream()
                     .max(Comparator.comparing(String::length))
                     .map(String::length)
                     .get();
@@ -538,7 +551,11 @@ public class Practice {
         public static List<Employee> getAllEmployeesDepartmentIdIs90or60or100or120or130 () {
             //TODO Implement the method
             return employeeService.readAll().stream()
-                    .takeWhile(employee -> employee.getDepartment().getId().toString().equals("90") || employee.getDepartment().getId().toString().equals("60") || employee.getDepartment().getId().toString().equals("100") || employee.getDepartment().getId().toString().equals("120") || employee.getDepartment().getId().toString().equals("130"))
+                    .takeWhile(employee -> employee.getDepartment().getId().toString().equals("90")
+                            || employee.getDepartment().getId().toString().equals("60")
+                            || employee.getDepartment().getId().toString().equals("100")
+                            || employee.getDepartment().getId().toString().equals("120")
+                            || employee.getDepartment().getId().toString().equals("130"))
                     .collect(Collectors.toList());
         }
 
